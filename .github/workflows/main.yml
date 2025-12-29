@@ -3,17 +3,48 @@ name: Django Project Unit Tests
 on: [push, pull_request]
 
 jobs:
-  # 1. Kutucuk: Serializer Testleri
-  serializer-tests:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Run Serializer Tests
-        
-        run: python manage.py test djangoapp.all_tests.serializer_test
+      
+      - name: Run Migrations
+        run: |
+          name: Django Project Unit Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Run Migrations
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+      
+      - name: Run All Tests
+        run: python manage.py makemigrations djangoapp
+      
+      - name: Run All Tests
+        run: python manage.py test djangoapp
