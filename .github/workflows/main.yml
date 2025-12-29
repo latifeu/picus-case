@@ -19,8 +19,8 @@ jobs:
       
       - name: Run Migrations
         run: |
-          python manage.py makemigrations
-          python manage.py migrate
+          python manage.py makemigrations djangoapp
+          
       
       - name: Run All Tests
         run: python manage.py test djangoapp
