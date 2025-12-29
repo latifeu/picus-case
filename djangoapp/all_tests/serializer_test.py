@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase
-from .serializer import User_serializer
+from djangoapp.serializer import User_serializer
 
 class UserSerializerTests(SimpleTestCase):
 
