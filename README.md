@@ -1,11 +1,11 @@
-Picus CRUD API Service
+## Picus CRUD API Service
 
 This repository contains my solution to the backend engineering task. The goal was to implement a simple CRUD API backed by PostgreSQL, containerize the system, and set up a CI/CD pipeline using GitHub Actions.
 
 Application Overview
 The application is a RESTful API built using Django and Django REST Framework (DRF). It exposes HTTP endpoints under the /picus path and stores data in a PostgreSQL database.
 
-1. Implemented Endpoints
+# 1. Implemented Endpoints
    
 The following endpoints were implemented according to the task specification:
 
@@ -17,13 +17,13 @@ GET /picus/get/{id}: Retrieves the object with the given key from PostgreSQL and
 
 DELETE /picus/{id}: Deletes the object associated with the given key from PostgreSQL.
 
-2. Docker Image
+# 2. Docker Image
    
 The application is containerized using a Dockerfile based on python:3.13.3-slim.
 All dependencies are installed from requirements.txt, the application runs inside the /app directory, and the Django server is started via a custom entrypoint script (django.sh). The container exposes port 8000.
 
 
-3. Docker Compose Setup
+# 3. Docker Compose Setup
    
 The project includes a docker-compose.yml file that runs the following services:
 Django application
@@ -44,7 +44,7 @@ Nginx Reverse Proxy:
 Nginx is configured as a reverse proxy to forward all requests under /picus/ to the Django application running on port 8000.
 The routing is defined in the Nginx configuration file and ensures that the application container is only accessible through Nginx
 
-4. CI/CD Pipeline (GitHub Actions)
+# 4. CI/CD Pipeline (GitHub Actions)
    
 Testing:
 
@@ -85,7 +85,7 @@ If the database connection is not ready during startup, the API endpoints intent
 Once the database becomes available and migrations are applied, the application continues to run normally and all endpoints start responding correctly.
 If a previously existing database volume is present, the application also starts and works without any issues.
 
-Running the Application
+# Running the Application
 
 To run the application using Docker, follow these steps:
 Pull the Docker image
