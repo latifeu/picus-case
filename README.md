@@ -43,4 +43,63 @@ Nginx Reverse Proxy:
 Nginx is configured as a reverse proxy to forward all requests under /picus/ to the Django application running on port 8000.
 The routing is defined in the Nginx configuration file and ensures that the application container is only accessible through Nginx
 
+4. CI/CD Pipeline (GitHub Actions)
+   
+Testing:
+
+The project includes unit tests focused on the User model to verify correct ORM behavior.
+The implemented tests cover:
+Creating a user and verifying persisted fields
+Validating field constraints such as name length
+Basic email format validation
+Creating and retrieving multiple records
+Retrieving a user by primary key
+Updating existing records
+Deleting records and verifying removal
+Filtering records by name and email
+All tests are implemented using Django’s TestCase.
+Test Database Configuration
+During test execution, the application automatically switches from PostgreSQL to an in-memory SQLite database.
+This keeps tests fast, isolated, and independent from external services, making them suitable for automated CI pipelines.
+PostgreSQL is used only in runtime environments, not during unit testing.
+
+Integration tests were initially considered. However, running them in the CI environment would require building the Docker image, starting the full docker-compose stack, waiting for PostgreSQL to become available, and applying database migrations before executing the tests.
+An attempt was made to address database readiness using fixed delays (e.g., sleep). However, this approach proved unreliable, as the required wait time could not be determined consistently across environments. To keep the CI pipeline simple, stable, and fast, integration tests were intentionally not included.
+
+Docker Image Build and Push to Docker Hub:
+
+As part of the GitHub Actions pipeline, the Docker image is built using the provided Dockerfile after all tests pass successfully. The image is then tagged and pushed to Docker Hub.
+
+
+The application reads its configuration from environment variables, particularly for database connectivity.
+Database name, user, password, host, and port are injected via Docker Compose and consumed in Django using os.environ.
+This allows the same Docker image to run in different environments without code changes.
+
+PostgreSQL data is persisted by using a Docker volume (pgdata) connected to PostgreSQL’s data directory (/var/lib/postgresql/data), so the data is not lost when containers stop or restart.
+
+Application Startup Behavior:
+
+The application is designed to start even if the database is not immediately available.
+If the database connection is not ready during startup, the API endpoints intentionally return a custom “database connection not ready” error.
+Once the database becomes available and migrations are applied, the application continues to run normally and all endpoints start responding correctly.
+If a previously existing database volume is present, the application also starts and works without any issues.
+
+Running the Application
+
+
+To run the application using Docker, follow these steps:
+Pull the Docker image
+docker pull lustun/picus-project:last-version
+Clone the repository
+git clone <your-github-repo-url>
+cd <repo-directory>
+Start the application using Docker Compose
+docker-compose -f docker-compose-production.yml up -d
+This command starts Nginx, the Django application, and PostgreSQL containers.
+Run database migrations
+After waiting a short time for the database container to initialize, run:
+docker exec djangoapp python manage.py migrate
+Once migrations are completed, the application is fully ready and can be accessed through Nginx.
+
+
 
