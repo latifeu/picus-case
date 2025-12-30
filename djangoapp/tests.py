@@ -68,9 +68,9 @@ class UserModelTest(TestCase):
         User.objects.create(name="A", email="ae@test.com")
         User.objects.create(name="B", email="b@test.com")
         
-        alice = User.objects.filter(name="A").first()
-        self.assertIsNotNone(alice)
-        self.assertEqual(alice.email, "a@test.com")
+        user = User.objects.filter(name="A").first()
+        self.assertIsNotNone(user)
+        self.assertEqual(user.email, "ae@test.com")
 
     def test_user_filter_by_email(self):
         User.objects.create(name="Test", email="u@test.com")
