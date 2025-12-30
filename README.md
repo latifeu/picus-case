@@ -1,4 +1,5 @@
 Picus CRUD API Service
+
 This repository contains my solution to the backend engineering task. The goal was to implement a simple CRUD API backed by PostgreSQL, containerize the system, and set up a CI/CD pipeline using GitHub Actions.
 
 Application Overview
@@ -86,20 +87,56 @@ If a previously existing database volume is present, the application also starts
 
 Running the Application
 
-
 To run the application using Docker, follow these steps:
 Pull the Docker image
+ ```  
 docker pull lustun/picus-project:last-version
+ ```  
 Clone the repository
+ ```  
 git clone <your-github-repo-url>
 cd <repo-directory>
+ ```  
+
 Start the application using Docker Compose
+ ```  
 docker-compose -f docker-compose-production.yml up -d
+ ```  
 This command starts Nginx, the Django application, and PostgreSQL containers.
 Run database migrations
 After waiting a short time for the database container to initialize, run:
+ ```  
 docker exec djangoapp python manage.py migrate
+ ```  
 Once migrations are completed, the application is fully ready and can be accessed through Nginx.
+
+Testing the API with curl:
+
+After the application is running and database migrations are completed, the API can be tested using the following curl commands.
+
+Create a new item
+```  
+curl -X POST http://localhost/picus/put \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Test User",
+    "email": "test@example.com"
+  }'
+```  
+ List all items
+```  
+curl http://localhost/picus/list
+```  
+
+ Get an item by key/id
+```  
+curl http://localhost/picus/get/1
+```  
+
+ Delete an item by key/id
+```  
+curl -X DELETE http://localhost/picus/1
+```  
 
 
 
