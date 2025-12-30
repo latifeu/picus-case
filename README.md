@@ -1,4 +1,4 @@
-## Picus CRUD API Service
+# Picus CRUD API Service
 
 This repository contains my solution to the backend engineering task. The goal was to implement a simple CRUD API backed by PostgreSQL, containerize the system, and set up a CI/CD pipeline using GitHub Actions.
 
@@ -17,13 +17,13 @@ GET /picus/get/{id}: Retrieves the object with the given key from PostgreSQL and
 
 DELETE /picus/{id}: Deletes the object associated with the given key from PostgreSQL.
 
-# 2. Docker Image
+## 2. Docker Image
    
 The application is containerized using a Dockerfile based on python:3.13.3-slim.
 All dependencies are installed from requirements.txt, the application runs inside the /app directory, and the Django server is started via a custom entrypoint script (django.sh). The container exposes port 8000.
 
 
-# 3. Docker Compose Setup
+## 3. Docker Compose Setup
    
 The project includes a docker-compose.yml file that runs the following services:
 Django application
@@ -34,19 +34,19 @@ Nginx (Reverse Proxy)
 Nginx is the only externally accessible service. It listens on port 80 and forwards all /picus/* requests to the Django application container.
 The services communicate over Docker’s internal network, ensuring that only Nginx is exposed to the outside world.
 
-Service Startup Order:
+### Service Startup Order:
 
 Although depends_on is used in docker-compose.yml to control container startup order, it does not guarantee database readiness.
 To handle this, the application includes error handling for database connection issues and returns a 503 Service Unavailable response when PostgreSQL is not yet available. This allows the application to start reliably in containerized environments.
 
-Nginx Reverse Proxy:
+### Nginx Reverse Proxy:
 
 Nginx is configured as a reverse proxy to forward all requests under /picus/ to the Django application running on port 8000.
 The routing is defined in the Nginx configuration file and ensures that the application container is only accessible through Nginx
 
-# 4. CI/CD Pipeline (GitHub Actions)
+## 4. CI/CD Pipeline (GitHub Actions)
    
-Testing:
+### Testing:
 
 The project includes unit tests focused on the User model to verify correct ORM behavior.
 The implemented tests cover:
@@ -67,7 +67,7 @@ PostgreSQL is used only in runtime environments, not during unit testing.
 Integration tests were initially considered. However, running them in the CI environment would require building the Docker image, starting the full docker-compose stack, waiting for PostgreSQL to become available, and applying database migrations before executing the tests.
 An attempt was made to address database readiness using fixed delays (e.g., sleep). However, this approach proved unreliable, as the required wait time could not be determined consistently across environments. To keep the CI pipeline simple, stable, and fast, integration tests were intentionally not included.
 
-Docker Image Build and Push to Docker Hub:
+### Docker Image Build and Push to Docker Hub:
 
 As part of the GitHub Actions pipeline, the Docker image is built using the provided Dockerfile after all tests pass successfully. The image is then tagged and pushed to Docker Hub.
 
@@ -78,14 +78,14 @@ This allows the same Docker image to run in different environments without code 
 
 PostgreSQL data is persisted by using a Docker volume (pgdata) connected to PostgreSQL’s data directory (/var/lib/postgresql/data), so the data is not lost when containers stop or restart.
 
-Application Startup Behavior:
+### Application Startup Behavior:
 
 The application is designed to start even if the database is not immediately available.
 If the database connection is not ready during startup, the API endpoints intentionally return a custom “database connection not ready” error.
 Once the database becomes available and migrations are applied, the application continues to run normally and all endpoints start responding correctly.
 If a previously existing database volume is present, the application also starts and works without any issues.
 
-# Running the Application
+## Running the Application
 
 To run the application using Docker, follow these steps:
 Pull the Docker image
