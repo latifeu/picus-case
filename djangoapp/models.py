@@ -4,9 +4,9 @@ import uuid
 
 # Create your models here.
 class User(models.Model):
-    #django kendi ekler am aben ekledim yine de 
+    #django adds id block but i add already 
     id = models.BigAutoField(primary_key=True)
-    #user tarafının gördüğü urlde id görünmesin diye public id 
+
     
 
     name = models.CharField(max_length=70)

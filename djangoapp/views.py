@@ -23,29 +23,53 @@ def user_list(request):
 
 @api_view(['POST'])
 def user_put(request):
-    serializer = User_serializer(data=request.data)
+    try:
 
-    if serializer.is_valid():
-        user = serializer.save()
+        serializer = User_serializer(data=request.data)
+
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(
+                {
+                    "id": user.id
+                },
+                status=201
+            )
+
+        return Response(serializer.errors, status=400)
+    except:
         return Response(
-            {
-                "id": user.id
-            },
-            status=201
+            {"error": "Database not ready"},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
         )
 
-    return Response(serializer.errors, status=400)
 
 
 @api_view(['GET'])
 def user_get(request, id):
-    user = get_object_or_404(User, id=id)
-    serializer = User_serializer(user)
-    return Response(serializer.data)
+    try:
+
+        user = get_object_or_404(User, id=id)
+        serializer = User_serializer(user)
+        return Response(serializer.data)
+    except:
+        return Response(
+            {"error": "Database not ready"},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
+        )
+
+
 
 
 @api_view(['DELETE'])
 def user_delete(request, id):
-    user = get_object_or_404(User, id=id)
-    user.delete()
-    return Response(status=204)
+    try:
+
+        user = get_object_or_404(User, id=id)
+        user.delete()
+        return Response(status=204)
+    except:
+        return Response(
+            {"error": "Database not ready"},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
+        )
