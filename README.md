@@ -5,7 +5,7 @@ This repository contains my solution to the backend engineering task. The goal w
 Application Overview
 The application is a RESTful API built using Django and Django REST Framework (DRF). It exposes HTTP endpoints under the /picus path and stores data in a PostgreSQL database.
 
-# 1. Implemented Endpoints
+## 1. Implemented Endpoints
    
 The following endpoints were implemented according to the task specification:
 
