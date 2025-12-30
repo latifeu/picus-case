@@ -37,7 +37,7 @@ def user_put(request):
             )
 
         return Response(serializer.errors, status=400)
-    except:
+    except (OperationalError, ProgrammingError):
         return Response(
             {"error": "Database not ready"},
             status=status.HTTP_503_SERVICE_UNAVAILABLE
@@ -52,7 +52,7 @@ def user_get(request, id):
         user = get_object_or_404(User, id=id)
         serializer = User_serializer(user)
         return Response(serializer.data)
-    except:
+    except (OperationalError, ProgrammingError):
         return Response(
             {"error": "Database not ready"},
             status=status.HTTP_503_SERVICE_UNAVAILABLE
@@ -68,7 +68,7 @@ def user_delete(request, id):
         user = get_object_or_404(User, id=id)
         user.delete()
         return Response(status=204)
-    except:
+    except (OperationalError, ProgrammingError):
         return Response(
             {"error": "Database not ready"},
             status=status.HTTP_503_SERVICE_UNAVAILABLE

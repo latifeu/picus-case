@@ -56,7 +56,7 @@ class UserModelTest(TestCase):
     def test_user_deletion(self):
         user = User.objects.create(
             name="Delete Test",
-            email="delete@test.com"
+            email="d@test.com"
         )
         user_id = user.id
         user.delete()
@@ -65,16 +65,16 @@ class UserModelTest(TestCase):
             User.objects.get(id=user_id)
 
     def test_user_filter_by_name(self):
-        User.objects.create(name="Alice", email="alice@test.com")
-        User.objects.create(name="Bob", email="bob@test.com")
+        User.objects.create(name="A", email="ae@test.com")
+        User.objects.create(name="B", email="b@test.com")
         
-        alice = User.objects.filter(name="Alice").first()
+        alice = User.objects.filter(name="A").first()
         self.assertIsNotNone(alice)
-        self.assertEqual(alice.email, "alice@test.com")
+        self.assertEqual(alice.email, "a@test.com")
 
     def test_user_filter_by_email(self):
-        User.objects.create(name="Test", email="unique@test.com")
+        User.objects.create(name="Test", email="u@test.com")
         
-        user = User.objects.filter(email="unique@test.com").first()
+        user = User.objects.filter(email="u@test.com").first()
         self.assertIsNotNone(user)
         self.assertEqual(user.name, "Test")
