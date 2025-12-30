@@ -94,8 +94,8 @@ docker pull lustun/picus-project:last-version
  ```  
 Clone the repository
  ```  
-git clone <your-github-repo-url>
-cd <repo-directory>
+git clone https://github.com/latifeu/picus-case.git
+cd picus-case/run
  ```  
 
 Start the application using Docker Compose
